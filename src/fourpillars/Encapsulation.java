@@ -1,7 +1,7 @@
 package fourpillars;
 
 public class Encapsulation {
-    public String username;
+    String username;
     private int balance;
 
     public Encapsulation(String username,int balance) {

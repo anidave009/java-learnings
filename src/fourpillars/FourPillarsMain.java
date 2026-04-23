@@ -2,17 +2,22 @@ package fourpillars;
 
 public class FourPillarsMain {
     public static void main(String[] args) {
-        Encapsulation user1=new Encapsulation("Aniket",20000);
-        //now because of encapsultaion one cannot do something like
-        // user1.balance=90000;bcs the field is private //achieved through access modifier
-        //one has to go through provided getters/setters/methods
+        Inheritance obj=new InheritanceChild("Shri Krishna");
+        obj.run();
+        obj.walk();
+        //even though object is of type Child i can only call methods which
+        //are in parent or common to both parent and child.
+//        Output:Parent Constructor Called
+//        Child Constructor
+//        Shri Krishna InheritanceChild.run
+//        Shri Krishna is walking
 
-        user1.withdraw(5000);
-        user1.deposit(5000);
-        //one has to use defined methods/ways  to change the state of data/
-
-        //using public , protected , default(private-package) as accesstype we can change the state.only private allows us to not change.
-        user1.username="Aniket";
-        //bcs username is public accessType.
+        Inheritance obj2=new Inheritance("Shri Ram");
+        //here reference and object both are of type parent.
+//        Parent Constructor Called
+//        Shri Ram is running
+//        Shri Ram is walking
+        obj2.run();
+        obj2.walk();
     }
 }
