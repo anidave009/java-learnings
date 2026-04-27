@@ -2,26 +2,67 @@ package multithreading;
 
 public class multithreading {
     public static void main(String[] args) throws InterruptedException {
-
-        Thread t = new Thread(() -> {
-            try {
-                Thread.sleep(5000);
-                System.out.println("During execution: " + Thread.currentThread().getState());
-            } catch (Exception e) {}
+        Thread t1 = new Thread(() -> {
+            for (int i = 1; i <= 5; i++) {
+                System.out.println("T1 → " + i);
+                try { Thread.sleep(500); } catch (Exception e) {}
+            }
         });
 
-//        System.out.println("Before start: " + t.getState());
-//        t.start();
-//        Thread.sleep(500); // main sleeps a bit, letting t go into sleep
-//        System.out.println("While sleeping: " + t.getState()); // TIMED_WAITING
-
-
-        Thread t1=new Thread(()->{
-            System.out.println("t1 is running");
+        Thread t2 = new Thread(() -> {
+            for (int i = 1; i <= 5; i++) {
+                System.out.println("T2 → " + i);
+                try { Thread.sleep(500); } catch (Exception e) {}
+            }
         });
+
         t1.start();
-        t1.join();
-        System.out.println("T1 state : " + t1.getState());//terminated
-
+        t2.start();
     }
 }
+
+//program 1
+//randomised order , coz it depends on core which is picking it up.
+//for (int i = 1; i <= 5; i++) {
+//int threadNumber = i;
+//Thread t = new Thread(() -> {
+//    System.out.println("Thread " + threadNumber + " running");
+//});
+//    t.start();
+//}
+
+//program 2 : all threads execute at same time .
+// for (int i = 1; i <= 5; i++) {
+//int threadNumber = i;
+//Thread t = new Thread(() -> {
+//    try {
+//        Thread.sleep(1000);
+//        System.out.println("Thread " + threadNumber + " done after sleeping");
+//    } catch (Exception e) {}
+//});
+//            t.start();
+//        }
+
+
+//program 3
+//Thread t1=new Thread(()->{
+//    try {
+//        Thread.sleep(3000);
+//        System.out.println("thread1");
+//    } catch (InterruptedException e) {}
+//});
+//
+//Thread t2=new Thread(()->{
+//    try {
+//        Thread.sleep(1000);
+//        System.out.println("thread2");
+//    } catch (InterruptedException e) {}
+//});
+//
+//        t1.start();
+//        t2.start();
+//        t1.join();//main is waiting for t1 to awake.
+//        t2.join();//main is waiting for t2 to awake.
+//
+//        System.out.println("All Threads Done, main continues");
+//
