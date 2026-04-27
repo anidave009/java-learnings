@@ -1,68 +1,59 @@
 package multithreading;
 
 public class multithreading {
+    static int availableSeats=1;
     public static void main(String[] args) throws InterruptedException {
-        Thread t1 = new Thread(() -> {
-            for (int i = 1; i <= 5; i++) {
-                System.out.println("T1 → " + i);
-                try { Thread.sleep(500); } catch (Exception e) {}
+        // User A trying to book
+        Thread userA = new Thread(() -> {
+            System.out.println("User A checking seats...");
+            if (availableSeats > 0) {
+                // Simulate some processing time (network delay etc)
+                try { Thread.sleep(100); } catch (Exception e) {}
+                availableSeats--;
+                System.out.println("User A booked! Seats left: " + availableSeats);
+            } else {
+                System.out.println("User A: No seats available");
             }
         });
 
-        Thread t2 = new Thread(() -> {
-            for (int i = 1; i <= 5; i++) {
-                System.out.println("T2 → " + i);
-                try { Thread.sleep(500); } catch (Exception e) {}
+        // User B trying to book
+        Thread userB = new Thread(() -> {
+            System.out.println("User B checking seats...");
+            if (availableSeats > 0) {
+                // Simulate some processing time
+                try { Thread.sleep(100); } catch (Exception e) {}
+                availableSeats--;
+                System.out.println("User B booked! Seats left: " + availableSeats);
+            } else {
+                System.out.println("User B: No seats available");
             }
         });
 
-        t1.start();
-        t2.start();
+        userA.start();
+        userB.start();
+
+        userA.join();
+        userB.join();
     }
 }
 
-//program 1
-//randomised order , coz it depends on core which is picking it up.
-//for (int i = 1; i <= 5; i++) {
-//int threadNumber = i;
-//Thread t = new Thread(() -> {
-//    System.out.println("Thread " + threadNumber + " running");
-//});
-//    t.start();
-//}
 
-//program 2 : all threads execute at same time .
-// for (int i = 1; i <= 5; i++) {
-//int threadNumber = i;
-//Thread t = new Thread(() -> {
-//    try {
-//        Thread.sleep(1000);
-//        System.out.println("Thread " + threadNumber + " done after sleeping");
-//    } catch (Exception e) {}
-//});
-//            t.start();
-//        }
-
-
-//program 3
 //Thread t1=new Thread(()->{
-//    try {
-//        Thread.sleep(3000);
-//        System.out.println("thread1");
-//    } catch (InterruptedException e) {}
+//    for(int i=0;i<1000;i++){
+//        counter++;
+//    }
 //});
 //
 //Thread t2=new Thread(()->{
-//    try {
-//        Thread.sleep(1000);
-//        System.out.println("thread2");
-//    } catch (InterruptedException e) {}
+//    for(int i=0;i<200000;i++){
+//        counter++;
+//    }
 //});
 //
 //        t1.start();
 //        t2.start();
-//        t1.join();//main is waiting for t1 to awake.
-//        t2.join();//main is waiting for t2 to awake.
 //
-//        System.out.println("All Threads Done, main continues");
+//        t1.join();
+//        t2.join();
 //
+//        System.out.println("Final counter: " + counter);
