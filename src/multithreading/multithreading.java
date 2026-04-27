@@ -1,52 +1,23 @@
 package multithreading;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class multithreading {
-    static int availableSeats=1;
-    static Object lock = new Object();
-
     public static void main(String[] args) throws InterruptedException {
-        // User A trying to book
-
-
-        Thread userA = new Thread(() -> {
-            synchronized (lock){
-            System.out.println("User A checking seats...");
-            if (availableSeats > 0) {
-                // Simulate some processing time (network delay etc)
-                try { Thread.sleep(100); } catch (Exception e) {}
-                availableSeats--;
-                System.out.println("User A booked! Seats left: " + availableSeats);
-            } else {
-                System.out.println("User A: No seats available");
-            }
-        }});
-
-        // User B trying to book
-        Thread userB = new Thread(() -> {
-            synchronized (lock){
-            System.out.println("User B checking seats...");
-            if (availableSeats > 0) {
-                // Simulate some processing time
-                try { Thread.sleep(100); } catch (Exception e) {}
-                availableSeats--;
-                System.out.println("User B booked! Seats left: " + availableSeats);
-            } else {
-                System.out.println("User B: No seats available");
-            }
-        }});
-
-        userA.start();
-        userB.start();
-
-        userA.join();
-        userB.join();
+        ExecutorService pool = Executors.newFixedThreadPool(3);
+        for(int i=1;i<=10;i++){
+            int taskNumber=i;
+            pool.submit(()->{
+                System.out.println("Task " + taskNumber + " running on " + Thread.currentThread().getName());
+            });
+        }
+        pool.shutdown();
     }
 }
 
-//ways to avoid race condition
-// 1. synchronised.
-//2 AtomicInteger
-//Only useful for simple number operations like counter++.
-//Not useful for ticket booking scenario because we need to check AND book together.
+//thread pool of 3 threads , we submit 10 tasks which are picked by 3 thread.
+//in random order from queue.
+//pool shutdown by completing all tasks. It doesnot return anyvalue till now .
+//for that future, completable is used.
 
-//3. Rentrant lock Why finally? If an error happens inside, lock still gets released. Without finally, lock stays grabbed forever and other threads wait forever.
