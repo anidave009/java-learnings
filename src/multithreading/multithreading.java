@@ -2,9 +2,14 @@ package multithreading;
 
 public class multithreading {
     static int availableSeats=1;
+    static Object lock = new Object();
+
     public static void main(String[] args) throws InterruptedException {
         // User A trying to book
+
+
         Thread userA = new Thread(() -> {
+            synchronized (lock){
             System.out.println("User A checking seats...");
             if (availableSeats > 0) {
                 // Simulate some processing time (network delay etc)
@@ -14,10 +19,11 @@ public class multithreading {
             } else {
                 System.out.println("User A: No seats available");
             }
-        });
+        }});
 
         // User B trying to book
         Thread userB = new Thread(() -> {
+            synchronized (lock){
             System.out.println("User B checking seats...");
             if (availableSeats > 0) {
                 // Simulate some processing time
@@ -27,7 +33,7 @@ public class multithreading {
             } else {
                 System.out.println("User B: No seats available");
             }
-        });
+        }});
 
         userA.start();
         userB.start();
@@ -37,23 +43,10 @@ public class multithreading {
     }
 }
 
+//ways to avoid race condition
+// 1. synchronised.
+//2 AtomicInteger
+//Only useful for simple number operations like counter++.
+//Not useful for ticket booking scenario because we need to check AND book together.
 
-//Thread t1=new Thread(()->{
-//    for(int i=0;i<1000;i++){
-//        counter++;
-//    }
-//});
-//
-//Thread t2=new Thread(()->{
-//    for(int i=0;i<200000;i++){
-//        counter++;
-//    }
-//});
-//
-//        t1.start();
-//        t2.start();
-//
-//        t1.join();
-//        t2.join();
-//
-//        System.out.println("Final counter: " + counter);
+//3. Rentrant lock Why finally? If an error happens inside, lock still gets released. Without finally, lock stays grabbed forever and other threads wait forever.
