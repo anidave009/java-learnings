@@ -1,32 +1,27 @@
 package multithreading;
 
 public class multithreading {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
-        // 1. Using Thread class
-        MyThread myThread = new MyThread("task1");
-        myThread.start();
+        Thread t = new Thread(() -> {
+            try {
+                Thread.sleep(5000);
+                System.out.println("During execution: " + Thread.currentThread().getState());
+            } catch (Exception e) {}
+        });
 
-        // 2. Using Runnable (separate task)
-        Thread t1 = new Thread(new MyThreadOne());
+//        System.out.println("Before start: " + t.getState());
+//        t.start();
+//        Thread.sleep(500); // main sleeps a bit, letting t go into sleep
+//        System.out.println("While sleeping: " + t.getState()); // TIMED_WAITING
+
+
+        Thread t1=new Thread(()->{
+            System.out.println("t1 is running");
+        });
         t1.start();
+        t1.join();
+        System.out.println("T1 state : " + t1.getState());//terminated
 
-        // 3. Anonymous Runnable
-        Runnable r1 = new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("Anonymous runnable running");
-            }
-        };
-        new Thread(r1).start();
     }
-
 }
-//    Thread t4=new Thread(){
-//        @Override
-//        public void run() {
-//            System.out.println("thread t4 is being executed");
-//        }
-//    };
-//    t4.start();
-//}
