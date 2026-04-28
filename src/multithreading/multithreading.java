@@ -1,23 +1,31 @@
 package multithreading;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 public class multithreading {
-    public static void main(String[] args) throws InterruptedException {
-        ExecutorService pool = Executors.newFixedThreadPool(3);
-        for(int i=1;i<=10;i++){
-            int taskNumber=i;
-            pool.submit(()->{
-                System.out.println("Task " + taskNumber + " running on " + Thread.currentThread().getName());
-            });
-        }
-        pool.shutdown();
+    public static void main(String[] args) throws InterruptedException, ExecutionException {
+        ExecutorService pool = Executors.newFixedThreadPool(2);
+    for(int i=0;i<4;i++){
+        int task = i;
+        pool.submit(() -> {
+            System.out.println("Task " + task + " → " + Thread.currentThread().getName());
+        });
+    }
+    Runnable runnable=()->{
+        System.out.println("Jai Shree Ram");
+    };
+    pool.submit(runnable);
+    pool.shutdown();
     }
 }
 
-//thread pool of 3 threads , we submit 10 tasks which are picked by 3 thread.
-//in random order from queue.
-//pool shutdown by completing all tasks. It doesnot return anyvalue till now .
-//for that future, completable is used.
-
+//ExecutorService pool=Executors.newFixedThreadPool(5);
+//Callable<Integer> task=()->{
+//    Thread.sleep(1000);
+//    return 40;
+//};
+//
+//Future<Integer> future=pool.submit(task);
+//Integer result =future.get();
+//        System.out.println("result:"+result);
+//        pool.shutdown();
